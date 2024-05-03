@@ -1,11 +1,11 @@
-import { IconButton } from "@mui/material";
-import { Search, Person, Menu } from "@mui/icons-material";
+import {IconButton} from "@mui/material";
+import {Search,Person,Menu} from "@mui/icons-material";
 import variables from "../styles/variables.scss";
-import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import {useState} from "react";
+import {useSelector,useDispatch} from "react-redux";
 import "../styles/Navbar.scss";
-import { Link, useNavigate } from "react-router-dom";
-import { setLogout } from "../redux/state";
+import {Link,useNavigate} from "react-router-dom";
+import {setLogout} from "../redux/state";
 
 
 const Navbar = () => {
@@ -15,7 +15,7 @@ const Navbar = () => {
 
   const dispatch = useDispatch();
 
-  const [search, setSearch] = useState("")
+  const [search,setSearch] = useState("")
 
   const navigate = useNavigate()
 
@@ -30,11 +30,11 @@ const Navbar = () => {
           type="text"
           placeholder="Search ..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e)=>setSearch(e.target.value)}
         />
-        <IconButton disabled={search === ""}>
+        <IconButton disabled={search===""}>
           <Search
-            sx={{ color: variables.pinkred }}
+            sx={{color:variables.pinkred }}
             onClick={() => {navigate(`/properties/search/${search}`)}}
           />
         </IconButton>
