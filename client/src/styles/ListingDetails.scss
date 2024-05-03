@@ -136,3 +136,15 @@
     }
   }
 }
+
+.pay_btn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding:20px;
+
+  @include sm {
+    padding: 10px 20px 120px;
+  }
+}
+
