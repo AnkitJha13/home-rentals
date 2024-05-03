@@ -9,13 +9,16 @@ import { DateRange } from "react-date-range";
 import Loader from "../components/Loader";
 import Navbar from "../components/Navbar";
 import { useSelector } from "react-redux";
-import Footer from "../components/Footer"
+import Footer from "../components/Footer";
+import StripeCheckout from "react-stripe-checkout";
 
 const ListingDetails = () => {
   const [loading, setLoading] = useState(true);
 
   const { listingId } = useParams();
   const [listing, setListing] = useState(null);
+
+  const [paymentCompleted, setPaymentCompleted] = useState(false);
 
   const getListingDetails = async () => {
     try {
@@ -38,8 +41,7 @@ const ListingDetails = () => {
     getListingDetails();
   }, []);
 
-  console.log(listing)
-
+  console.log(listing);
 
   /* BOOKING CALENDAR */
   const [dateRange, setDateRange] = useState([
@@ -50,32 +52,33 @@ const ListingDetails = () => {
     },
   ]);
 
-  // const handleSelect = (ranges) => {
-  //   // Update the selected date range when user makes a selection
-  //   setDateRange([ranges.selection]);
-  // };
-
   const handleSelect = (ranges) => {
-  const selectedStartDate = ranges.selection.startDate;
-  const today = new Date();
+    const selectedStartDate = ranges.selection.startDate;
+    const today = new Date();
 
-  if (selectedStartDate < today) {
+    if (selectedStartDate < today) {
       // Alert the user that they cannot book for past dates
       alert("Please select a future date for booking.");
-  } else {
+    } else {
       // Update the selected date range when user selects a valid future date
       setDateRange([ranges.selection]);
-  }
-};
+    }
+  };
 
   const start = new Date(dateRange[0].startDate);
   const end = new Date(dateRange[0].endDate);
   const dayCount = Math.round(end - start) / (1000 * 60 * 60 * 24); // Calculate the difference in day unit
 
   /* SUBMIT BOOKING */
-  const customerId = useSelector((state) => state?.user?._id)
+  const customerId = useSelector((state) => state?.user?._id);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  //  for payment button
+  const onToken = (token) => {
+    console.log(token);
+    setPaymentCompleted(true);
+  };
 
   const handleSubmit = async () => {
     try {
@@ -86,30 +89,29 @@ const ListingDetails = () => {
         startDate: dateRange[0].startDate.toDateString(),
         endDate: dateRange[0].endDate.toDateString(),
         totalPrice: listing.price * dayCount,
-      }
-
+      };
       const response = await fetch("https://home-rentals-6fme.onrender.com/bookings/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(bookingForm)
-      })
+        body: JSON.stringify(bookingForm),
+      });
 
       if (response.ok) {
-        navigate(`/${customerId}/trips`)
+        navigate(`/${customerId}/trips`);
       }
     } catch (err) {
-      console.log("Submit Booking Failed.", err.message)
+      console.log("Submit Booking Failed", err.message);
     }
-  }
+  };
 
   return loading ? (
     <Loader />
   ) : (
     <>
       <Navbar />
-      
+
       <div className="listing-details">
         <div className="title">
           <h1>{listing.title}</h1>
@@ -129,6 +131,7 @@ const ListingDetails = () => {
           {listing.type} in {listing.city}, {listing.province},{" "}
           {listing.country}
         </h2>
+
         <p>
           {listing.guestCount} guests - {listing.bedroomCount} bedroom(s) -{" "}
           {listing.bedCount} bed(s) - {listing.bathroomCount} bathroom(s)
@@ -142,6 +145,7 @@ const ListingDetails = () => {
               ""
             )}`}
           />
+
           <h3>
             Hosted by {listing.creator.firstName} {listing.creator.lastName}
           </h3>
@@ -192,14 +196,25 @@ const ListingDetails = () => {
               <p>Start Date: {dateRange[0].startDate.toDateString()}</p>
               <p>End Date: {dateRange[0].endDate.toDateString()}</p>
 
-              <button className="button" type="submit" onClick={handleSubmit}>
+              {/* publishable api key for payment process */}
+              <div className="pay_btn">
+                <StripeCheckout
+                  token={onToken}
+                  name="Payment"
+                  dollar="American dollar"
+                  amount={listing.price * dayCount * 100}
+                  stripeKey="pk_test_51PC17vSBExY56f70Np5EVAwM16w2A6P0HUeIh4tb040nYVkkRmoMvepLWXVEmmSQNUia7xPFF86yhFhPCRBFPAWc00pnij3RKX"
+                />
+              </div>
+              
+              {/* // Enable the button only if payment is completed */}
+              <button className="button" type="submit" onClick={handleSubmit} disabled={!paymentCompleted} >
                 BOOKING
               </button>
             </div>
           </div>
         </div>
       </div>
-
       <Footer />
     </>
   );
