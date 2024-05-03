@@ -1,16 +1,16 @@
 const router = require("express").Router();
 const multer = require("multer");
 
-const User = require("../models/User");
 const Listing = require("../models/Listing");
+const User = require("../models/User")
 
-/* Configure Multer for FILE UPLOADS */
+/* Configuration Multer for File Upload */
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "public/uploads/"); // Store uploaded files in the 'uploads' folder
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname); // Use the original file name
+    cb(null, file.originalname); // Use the original file name
   },
 });
 
@@ -19,9 +19,9 @@ const upload = multer({ storage });
 /* CREATE LISTING */
 router.post("/create", upload.array("listingPhotos"), async (req, res) => {
   try {
-    /* Take information from the form */
+    /* Take the information from the form */
     const {
-      userId,
+      creator,
       category,
       type,
       streetAddress,
@@ -41,21 +41,16 @@ router.post("/create", upload.array("listingPhotos"), async (req, res) => {
       price,
     } = req.body;
 
-    const user = await User.findById(userId);
-
-    /* The uploaded file is available as req.file */
-    const listingPhotos = req.files;
+    const listingPhotos = req.files
 
     if (!listingPhotos) {
-      return res.status(400).send("No file uploaded.");
+      return res.status(400).send("No file uploaded.")
     }
 
-    /* Get photo URLs */
-    const listingPhotosPaths = listingPhotos.map((file) => file.path);
+    const listingPhotoPaths = listingPhotos.map((file) => file.path)
 
     const newListing = new Listing({
-      userId,
-      firstName: user.firstName,
+      creator,
       category,
       type,
       streetAddress,
@@ -68,87 +63,76 @@ router.post("/create", upload.array("listingPhotos"), async (req, res) => {
       bedCount,
       bathroomCount,
       amenities,
-      listingPhotosPaths,
+      listingPhotoPaths,
       title,
       description,
       highlight,
       highlightDesc,
       price,
-    });
+    })
 
-    await newListing.save();
+    await newListing.save()
 
-    res.status(201).json(newListing);
+    res.status(200).json(newListing)
   } catch (err) {
-    res
-      .status(409)
-      .json({ message: "Fail to create Listing", error: err.message });
-    console.log(err);
+    res.status(409).json({ message: "Fail to create Listing", error: err.message })
+    console.log(err)
   }
 });
 
-/* GET LISTINGS BY CATEGORY */
+/* GET lISTINGS BY CATEGORY */
 router.get("/", async (req, res) => {
-  const qCategory = req.query.category;
+  const qCategory = req.query.category
 
   try {
-    let listings;
+    let listings
     if (qCategory) {
-      listings = await Listing.find({ category: qCategory });
+      listings = await Listing.find({ category: qCategory }).populate("creator")
     } else {
-      listings = await Listing.find();
+      listings = await Listing.find().populate("creator")
     }
-    res.status(202).json(listings);
+
+    res.status(200).json(listings)
   } catch (err) {
-    res.status(404).json({ error: err.message });
+    res.status(404).json({ message: "Fail to fetch listings", error: err.message })
+    console.log(err)
   }
-});
+})
 
 /* GET LISTINGS BY SEARCH */
 router.get("/search/:search", async (req, res) => {
-  const { search } = req.params;
+  const { search } = req.params
 
   try {
-    let listings = [];
-    
-    if (search == "all") {
-      listings = await Listing.find().populate("creator");
+    let listings = []
+
+    if (search === "all") {
+      listings = await Listing.find().populate("creator")
     } else {
       listings = await Listing.find({
         $or: [
-          { category: { $regex: search, $options: "i" } },
-          { title: { $regex: search, $options: "i" } },
-        ],
-      }).populate("creator");
+          { category: {$regex: search, $options: "i" } },
+          { title: {$regex: search, $options: "i" } },
+        ]
+      }).populate("creator")
     }
 
-    res.status(202).json(listings);
+    res.status(200).json(listings)
   } catch (err) {
-    res.status(404).json({ error: err.message });
+    res.status(404).json({ message: "Fail to fetch listings", error: err.message })
+    console.log(err)
   }
-});
+})
 
-
-/* GET USER'S LISTINGS */
-router.get("/:userId/listings", async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const userListings = await Listing.find({ userId });
-    res.status(202).json(userListings);
-  } catch (err) {
-    res.status(404).json({ error: err.message });
-  }
-});
-
-/* GET LISTING DETAILS */
+/* LISTING DETAILS */
 router.get("/:listingId", async (req, res) => {
   try {
-    const { listingId } = req.params;
-    const listing = await Listing.findById(listingId);
-    res.status(202).json(listing);
+    const { listingId } = req.params
+    const listing = await Listing.findById(listingId).populate("creator")
+    res.status(202).json(listing)
   } catch (err) {
-    res.status(404).json({ error: err.message });
+    res.status(404).json({ message: "Listing can not found!", error: err.message })
   }
-});
+})
 
-module.exports = router;
+module.exports = router
