@@ -1,11 +1,12 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
 const ListingSchema = new mongoose.Schema(
   {
-    creator: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+    userId: {
+      type: String,
+      required: true,
     },
+    firstName: String,
     category: {
       type: String,
       required: true,
@@ -18,17 +19,13 @@ const ListingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    aptSuite: {
-      type: String,
-      required: true,
-    },
+    aptSuite: String,
     city: {
       type: String,
       required: true,
     },
     province: {
       type: String,
-      required: true,
     },
     country: {
       type: String,
@@ -52,32 +49,33 @@ const ListingSchema = new mongoose.Schema(
     },
     amenities: {
       type: Array,
-      default:[]
+      default: [{}],
     },
-    listingPhotoPaths: [{ type: String }], // Store photo URLs
+    listingPhotosPaths: [{ type: String }], // Store photo URLs as an array
     title: {
       type: String,
-      required: true
+      required: true,
     },
     description: {
       type: String,
-      required: true
+      required: true,
     },
     highlight: {
       type: String,
-      required: true
+      required: true,
     },
     highlightDesc: {
       type: String,
-      required: true
+      required: true,
     },
     price: {
       type: Number,
       required: true,
-    }
+    },
   },
-  { timestamps: true}
-)
+  { timestamps: true }
+);
 
-const Listing = mongoose.model("Listing", ListingSchema )
-module.exports = Listing
+const Listing = mongoose.model("Listing", ListingSchema);
+
+module.exports = Listing;
