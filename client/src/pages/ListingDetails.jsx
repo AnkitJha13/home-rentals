@@ -50,10 +50,23 @@ const ListingDetails = () => {
     },
   ]);
 
+  // const handleSelect = (ranges) => {
+  //   // Update the selected date range when user makes a selection
+  //   setDateRange([ranges.selection]);
+  // };
+
   const handleSelect = (ranges) => {
-    // Update the selected date range when user makes a selection
-    setDateRange([ranges.selection]);
-  };
+  const selectedStartDate = ranges.selection.startDate;
+  const today = new Date();
+
+  if (selectedStartDate < today) {
+      // Alert the user that they cannot book for past dates
+      alert("Please select a future date for booking.");
+  } else {
+      // Update the selected date range when user selects a valid future date
+      setDateRange([ranges.selection]);
+  }
+};
 
   const start = new Date(dateRange[0].startDate);
   const end = new Date(dateRange[0].endDate);
