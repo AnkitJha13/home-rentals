@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 
 const UserSchema = new mongoose.Schema(
   {
@@ -23,15 +23,15 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    tripList: {
+      type: Array,
+      default: [],
+    },
     wishList: {
       type: Array,
       default: [],
     },
     propertyList: {
-      type: Array,
-      default: [],
-    },
-    tripList: {
       type: Array,
       default: [],
     },
@@ -41,8 +41,7 @@ const UserSchema = new mongoose.Schema(
     }
   },
   { timestamps: true }
-);
+)
 
 const User = mongoose.model("User", UserSchema)
-
 module.exports = User
