@@ -10,9 +10,9 @@ const Footer = () => {
       <div className="footer_center">
         <h3>Useful Links</h3>
         <ul>
-          <li>About Us</li>
-          <li>Terms and Conditions</li>
-          <li>Return and Refund Policy</li>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Terms and Conditions</a></li>
+          <li><a href="#">Return and Refund Policy</a></li>
         </ul>
       </div>
 
@@ -24,7 +24,7 @@ const Footer = () => {
         </div>
         <div className="footer_right_info">
           <Email />
-          <p>dreamnest@support.com</p>
+          <p><a href="mailto:homehub@support.com">homehub@support.com</a></p>
         </div>
         <div className="footer_right_info">
           <LocationOn />
