@@ -5,7 +5,7 @@
   cursor: pointer;
   padding: 5px; /* Reduced padding */
   border-radius: 8px; /* Adjusted border radius */
-  max-width: 280px; /* Set a max-width for the card */
+  max-width: 240px; /* Further reduced max-width for the card */
   margin: 15px; /* Added margin to increase gap between cards */
   transition: transform 0.5s ease, box-shadow 0.5s ease; /* Added transition for smooth hover effect */
 
@@ -15,7 +15,7 @@
   }
 
   .slider-container {
-    width: 280px; /* Adjusted width */
+    width: 240px; /* Further reduced width */
     overflow: hidden;
     border-radius: 8px; /* Adjusted border radius */
     margin-bottom: 8px; /* Reduced margin */
@@ -28,7 +28,7 @@
         position: relative;
         flex: 0 0 100%;
         width: 100%;
-        height: 240px; /* Reduced height */
+        height: 200px; /* Further reduced height */
         display: flex;
         align-items: center;
 
@@ -70,24 +70,24 @@
   }
 
   h3 {
-    font-size: 16px; /* Reduced font size */
+    font-size: 14px; /* Further reduced font size */
   }
 
   p {
-    font-size: 14px; /* Reduced font size */
+    font-size: 12px; /* Further reduced font size */
   }
 
   span {
     font-weight: 700;
-    font-size: 16px; /* Reduced font size */
+    font-size: 14px; /* Further reduced font size */
   }
 
   .favorite {
     position: absolute;
-    right: 15px; /* Adjusted positioning */
-    top: 15px; /* Adjusted positioning */
+    right: 10px; /* Adjusted positioning */
+    top: 10px; /* Adjusted positioning */
     border: none;
-    font-size: 18px; /* Reduced icon size */
+    font-size: 16px; /* Further reduced icon size */
     cursor: pointer;
     z-index: 999;
     background: none;
