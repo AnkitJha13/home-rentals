@@ -86,10 +86,10 @@ export const categories = [
     description: "This property is on an island!",
   },
   {
-    img: "assets/lake_cat.webp",
-    label: "Lakefront",
-    icon: <GiBoatFishing />,
-    description: "This property is near a lake!",
+    img: "assets/camping_cat.jpg",
+    label: "Camping",
+    icon: <GiForestCamp />,
+    description: "This property offers camping activities!",
   },
   {
     img: "assets/skiing_cat.jpg",
@@ -110,10 +110,10 @@ export const categories = [
     description: "This property is in a spooky cave!",
   },
   {
-    img: "assets/camping_cat.jpg",
-    label: "Camping",
-    icon: <GiForestCamp />,
-    description: "This property offers camping activities!",
+    img: "assets/lake_cat.webp",
+    label: "Lakefront",
+    icon: <GiBoatFishing />,
+    description: "This property is near a lake!",
   },
   {
     img: "assets/arctic_cat.webp",
